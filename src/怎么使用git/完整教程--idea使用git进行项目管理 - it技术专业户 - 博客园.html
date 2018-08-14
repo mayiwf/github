@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)https://www.cnblogs.com/java-maowei/p/5950930.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="origin">
+<title>完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园</title>
+<meta property="og:description" content="第一部分: 安装 1. 下载地址: https://git-scm.com/download/win; 如果速度慢, 使用 迅雷下载; 2. 点击安装, 然后下一步, 直到下面这个页面: 建议: 按照">
+<link type="text/css" rel="stylesheet" href="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/bundle-CodingLife.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/bundle-CodingLife-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/java-maowei/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/java-maowei/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/java-maowei/wlwmanifest.xml">
+<script async="" src="https://www.google-analytics.com/analytics.js"></script><script src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/jquery-2.2.0.min.js"></script>
+<script type="text/javascript">var currentBlogApp = 'java-maowei', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/blog-common.js" type="text/javascript"></script>
+<style type="text/css" adt="123"></style><script>//console.log('a')
+</script><script>//remove 17173 video ad
+doAdblock();
+function doAdblock(){
+    (function() {
+        function A() {}
+        A.prototype = {
+            rules: {
+                '17173_in':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/PreloaderFile(Customer)?\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173_in_20150522.swf"
+                },
+                '17173_out':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/PreloaderFileFirstpage\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173_out_20150522.swf"
+                },
+                '17173_live':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/Player_stream(_firstpage)?\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173_stream_20150522.swf"
+                },
+                '17173_live_out':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/Player_stream_(custom)?Out\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173.out.Live.swf"
+                }
+            },
+            _done: null,
+            get done() {
+                if(!this._done) {
+                    this._done = new Array();
+                }
+                return this._done;
+            },
+            addAnimations: function() {
+                var style = document.createElement('style');
+                style.type = 'text/css';
+                style.innerHTML = 'object,embed{\
+                -webkit-animation-duration:.001s;-webkit-animation-name:playerInserted;\
+                -ms-animation-duration:.001s;-ms-animation-name:playerInserted;\
+                -o-animation-duration:.001s;-o-animation-name:playerInserted;\
+                animation-duration:.001s;animation-name:playerInserted;}\
+                @-webkit-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @-ms-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @-o-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}';
+                document.getElementsByTagName('head')[0].appendChild(style);
+            },
+            animationsHandler: function(e) {
+                if(e.animationName === 'playerInserted') {
+                    this.replace(e.target);
+                }
+            },
+            replace: function(elem) {
+                if(this.done.indexOf(elem) != -1) return;
+                this.done.push(elem);
+                var player = elem.data || elem.src;
+                if(!player) return;
+                var i, find, replace = false;
+                for(i in this.rules) {
+                    find = this.rules[i]['find'];
+                    if(find.test(player)) {
+                        replace = this.rules[i]['replace'];
+                        if('function' === typeof this.rules[i]['preHandle']) {
+                            this.rules[i]['preHandle'].bind(this, elem, find, replace, player)();
+                        }else{
+                            this.reallyReplace.bind(this, elem, find, replace)();
+                        }
+                        break;
+                    }
+                }
+            },
+            reallyReplace: function(elem, find, replace) {
+                elem.data && (elem.data = elem.data.replace(find, replace)) || elem.src && ((elem.src = elem.src.replace(find, replace)) && (elem.style.display = 'block'));
+                var b = elem.querySelector("param[name='movie']");
+                this.reloadPlugin(elem);
+            },
+            reloadPlugin: function(elem) {
+                var nextSibling = elem.nextSibling;
+                var parentNode = elem.parentNode;
+                parentNode.removeChild(elem);
+                var newElem = elem.cloneNode(true);
+                this.done.push(newElem);
+                if(nextSibling) {
+                    parentNode.insertBefore(newElem, nextSibling);
+                } else {
+                    parentNode.appendChild(newElem);
+                }
+            },
+            init: function() {
+                var handler = this.animationsHandler.bind(this);
+                document.body.addEventListener('webkitAnimationStart', handler, false);
+                document.body.addEventListener('msAnimationStart', handler, false);
+                document.body.addEventListener('oAnimationStart', handler, false);
+                document.body.addEventListener('animationstart', handler, false);
+                this.addAnimations();
+            }
+        };
+        new A().init();
+    })();
+}
+//remove baidu search ad
+if(document.URL.indexOf('www.baidu.com') >= 0){
+    if(document && document.getElementsByTagName && document.getElementById && document.body){
+        var aa = function(){
+            var all = document.body.querySelectorAll("#content_left div,#content_left table");
+            for(var i = 0; i < all.length; i++){
+                if(/display:\s?(table|block)\s!important/.test(all[i].getAttribute("style"))){all[i].style.display= "none";all[i].style.visibility='hidden';}
+            }
+            all = document.body.querySelectorAll('.result.c-container[id="1"]');
+            //if(all.length == 1) return;
+            for(var i = 0; i < all.length; i++){
+                if(all[i].innerHTML && all[i].innerHTML.indexOf('广告')>-1){
+                    all[i].style.display= "none";all[i].style.visibility='hidden';
+                }
+            }
+        }
+        aa();
+        document.getElementById('wrapper_wrapper').addEventListener('DOMSubtreeModified',aa)
+    };
+}
+//remove sohu video ad
+if (document.URL.indexOf("tv.sohu.com") >= 0){
+    if (document.cookie.indexOf("fee_status=true")==-1){document.cookie='fee_status=true'};
+}
+//remove 56.com video ad
+if (document.URL.indexOf("56.com") >= 0){
+    if (document.cookie.indexOf("fee_status=true")==-1){document.cookie='fee_status=true'};
+}
+//fore iqiyi enable html5 player function
+if (document.URL.indexOf("iqiyi.com") >= 0){
+    if (document.cookie.indexOf("player_forcedType=h5_VOD")==-1){
+        document.cookie='player_forcedType=h5_VOD'
+        if(localStorage.reloadTime && Date.now() - parseInt(localStorage.reloadTime)<60000){
+            console.log('no reload')
+        }else{
+            location.reload()
+            localStorage.reloadTime = Date.now();
+        }
+    }
+}
+</script><style type="text/css">object,embed{                -webkit-animation-duration:.001s;-webkit-animation-name:playerInserted;                -ms-animation-duration:.001s;-ms-animation-name:playerInserted;                -o-animation-duration:.001s;-o-animation-name:playerInserted;                animation-duration:.001s;animation-name:playerInserted;}                @-webkit-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @-ms-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @-o-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}</style></head>
+<body>
+<a name="top"></a>
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="https://www.cnblogs.com/java-maowei/"><img id="blogLogo" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="https://www.cnblogs.com/java-maowei/">it技术专业户</a></h1>
+<h2></h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">博客园</a></li>
+<li><a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/java-maowei/">首页</a></li>
+<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li><a id="blog_nav_contact" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/it%E6%8A%80%E6%9C%AF%E4%B8%93%E4%B8%9A%E6%88%B7">联系</a></li>
+<li><a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/java-maowei/rss">订阅</a>
+<!--<a id="blog_nav_rss_image" class="aHeaderXML" href="https://www.cnblogs.com/java-maowei/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>--></li>
+<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<span id="stats_post_count">随笔 - 2&nbsp; </span>
+<span id="stats_article_count">文章 - 0&nbsp; </span>
+<span id="stats-comment_count">评论 - 3</span>
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/java-maowei/p/5950930.html">完整教程--idea使用git进行项目管理</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><h1><b>第一部分</b><b>:</b> <b>安装</b></h1> <p>1. 下载地址:&nbsp; https://git-scm.com/download/win; 如果速度慢, 使用 迅雷下载;  </p><p>2. 点击安装, 然后下一步, 直到下面这个页面:  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215035125-1286162276.png"><img title="Image[10]" style="margin: 0px; display: inline" alt="Image[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215049390-683685566.png" width="503" height="388"></a>  </p><p>建议: 按照上面所示方式选中复选框 ;  </p><p>3&nbsp; 点击下一步, 直到出现这个页面:  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215050062-2098566110.png"><img title="Image(1)[10]" style="margin: 0px; display: inline" alt="Image(1)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215050968-1839934064.png" width="503" height="388"></a>  </p><p>建议: 这个页面是选择git使用的命令行, 建议使用第一个git自带的;  </p><p>4. 点击下一步, 直到出现下面这个页面:  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215051921-1464942556.png"><img title="Image(2)[10]" style="margin: 0px; display: inline" alt="Image(2)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215052781-1470996718.png" width="503" height="388"></a>  </p><p>建议: 这个是选择行结束符, windows与linux行结束符不一致; 建议选择第一个, 这样git会自动转换;  </p><p>5. 点击下一步, 直到出现下面这个页面:  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215053500-401484529.png"><img title="Image(3)[10]" style="margin: 0px; display: inline" alt="Image(3)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215054109-1282552960.png" width="503" height="388"></a>  </p><p>建议: 选择命名行窗口, 建议第一个;  </p><p>6点击下一步, 直到出现下面这个页面:  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215054812-1330218317.png"><img title="Image(4)[10]" style="margin: 0px; display: inline" alt="Image(4)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215055421-818314841.png" width="503" height="388"></a>  </p><p>建议: 是否开启文件缓存, 选第一个; 点击install;  </p><p>7 安装成功后: 击桌面上的git快捷方式打开命名行, 运行git命名, 出现如下界面则成功:  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215056046-279591444.png"><img title="Image(5)[10]" style="margin: 0px; display: inline" alt="Image(5)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215057062-193495971.png" width="595" height="700"></a>  </p><p>&nbsp; </p><p>&nbsp; </p><p>&nbsp; </p><h1><b>第二部分</b><b>: windows</b><b>配置</b><b>git SSH</b><b>服务</b><b>:</b></h1> <p>1. 生成SSH秘钥对:  </p><p>命名行运行 : ssh-keygen -t rsa -C "你的邮箱地址";  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215057640-1141543284.png"><img title="Image(6)[10]" style="margin: 0px; display: inline" alt="Image(6)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215058265-1498689268.png" width="532" height="83"></a>  </p><p>2输入你的秘钥密码:  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215058890-1730127597.png"><img title="Image(7)[10]" style="margin: 0px; display: inline" alt="Image(7)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215059609-2086190107.png" width="590" height="333"></a>  </p><p>3 找到这个文件:用记事本打开, 然后复制内容  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215100281-1910100345.png"><img title="Image(8)[10]" style="margin: 0px; display: inline" alt="Image(8)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215101390-1405804110.png" width="897" height="310"></a>  </p><p>4 进入git, 从这里打开信息设置页面: 在这里添加生成的秘钥;  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215102265-493643729.png"><img title="Image(9)[10]" style="margin: 0px; display: inline" alt="Image(9)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215103093-2031910383.png" width="624" height="359"></a>  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215103937-66218126.png"><img title="Image(10)[10]" style="display: inline" alt="Image(10)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215104500-1314689920.png" width="538" height="363"></a></p> <p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215105390-953822618.png"><img title="Image(11)[10]" style="display: inline" alt="Image(11)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215107062-1787382451.png" width="733" height="244"></a></p> <p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215107687-1576052587.png"><img title="Image(12)[10]" style="margin: 0px; display: inline" alt="Image(12)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215108296-1606490018.png" width="738" height="561"></a>  </p><h1><b></b>&nbsp;</h1> <h1><b></b>&nbsp;</h1> <h1><b>第三部分</b><b>:</b> <b>配置全局用户名和邮箱</b></h1> <p>1.命令行运行以下指令:  </p><p>git config --global user.name&nbsp; "你的用户名"  </p><p>git config --global user.email "你的邮箱"  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215109390-414604279.png"><img title="Image(13)[10]" style="margin: 0px; display: inline" alt="Image(13)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215110062-704838515.png" width="595" height="328"></a>  </p><p>"  </p><h1><b>第四部分</b><b>: IDEA</b> <b>配置</b></h1> <p>1 配置git路径  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215110906-1300755843.png"><img title="Image(14)[10]" style="margin: 0px; display: inline" alt="Image(14)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215111843-1486523528.png" width="1028" height="413"></a>  </p><p>2.新建一个项目: TestGit,&nbsp;&nbsp; src下创建一个HelloWorld.java文件,&nbsp; 项目路径:C:\Users\Administrator\Desktop\code\TestGit  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215112578-1348200505.png"><img title="Image(15)[10]" style="margin: 0px; display: inline" alt="Image(15)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215113453-1871200092.png" width="927" height="405"></a>  </p><p>3 打开github, 新建仓库TestGit;  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215114171-1691648025.png"><img title="Image(16)[10]" style="margin: 0px; display: inline" alt="Image(16)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215114953-1818789710.png" width="831" height="698"></a>  </p><p>2 打开项目所在文件夹, 在文件夹上右键运行: git bash here  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215116000-959826859.png"><img title="Image(17)[10]" style="margin: 0px; display: inline" alt="Image(17)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215117906-19783796.png" width="616" height="333"></a>  </p><p>3 命名行依次运行以下命名:  </p><p>git init  </p><p>git add src  </p><p>git commit -m&nbsp; "first commit"  </p><p>git remote add origin https://github.com/mw138/TestGit.git  </p><p>git push&nbsp; -u origin master  </p><p>4 如果不出错误提示输入用户名, 密码:  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215118609-808892274.png"><img title="Image(18)[10]" style="display: inline" alt="Image(18)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215119718-1210888046.png" width="595" height="520"></a>  </p><p>5 输入用户名密码后,开始提交,出现下面提示则成功  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215120218-1681617492.png"><img title="Image(19)[10]" style="display: inline" alt="Image(19)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215120687-1001878381.png" width="532" height="61"></a>  </p><p>6 打开github验证: 可以看出确实提交上去了  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215121437-1388207267.png"><img title="Image(20)[10]" style="display: inline" alt="Image(20)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215122171-977418983.png" width="1034" height="315"></a>  </p><p>7 至此, 该项目已经加入到了github的版本控制,&nbsp; 在idea上可以进行提交和更新了;  </p><p>新建一个Test文件, 然后提交到版本库,&nbsp; 步骤如下:  </p><p>&nbsp;</p> <p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215122859-2056142347.png"><img title="Image(21)[10]" style="float: left; display: inline" alt="Image(21)[10]" align="left" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215123390-1751065475.png" width="574" height="283"></a></p> <p>&nbsp;</p> <p>&nbsp;</p> <p>&nbsp;</p> <p>&nbsp;</p> <p>&nbsp;</p> <p>&nbsp;</p> <p>&nbsp;</p> <p>&nbsp;</p> <p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215124109-212837957.png"><img title="Image(23)[10]" style="display: inline" alt="Image(23)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215124734-1386783761.png" width="488" height="305"></a></p> <p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215125562-414267189.png"><img title="Image(22)[10]" style="display: inline" alt="Image(22)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215126531-2065788180.png" width="413" height="238"></a></p> <p>&nbsp;</p> <p>&nbsp;</p> <p>idea上: vcs --&gt; git --&gt; push</p> <p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215127687-1703065868.png"><img title="Image(25)[10]" style="display: inline" alt="Image(25)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215128296-1980778780.png" width="366" height="569"></a>  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215128953-927711839.png"><img title="Image(24)[10]" style="display: inline" alt="Image(24)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215130093-285902873.png" width="759" height="618"></a>  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215130796-1939016541.png"><img title="Image(26)[10]" style="display: inline" alt="Image(26)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215131343-1044871854.png" width="521" height="168"></a>  </p><p><a href="http://images2015.cnblogs.com/blog/1002655/201610/1002655-20161011215131984-549169661.png"><img title="Image(27)[10]" style="display: inline" alt="Image(27)[10]" src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/1002655-20161011215132734-1320894285.png" width="697" height="365"></a>注意事项:  </p><p>1如果第一次使用git, idea会提示输入github用户名, 密码;  </p><p>2如果出现提示 提示没有本地分支, 运行以下命名:  </p><p>git branch --set-upstream master origin/master  </p><p><b>至此</b><b>:</b> <b>大功告成</b><b>!!!</b></p></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory"></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(5950930,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;b78ac903-9758-e611-9fc1-ac853d9f53cc&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/java-maowei/" target="_blank"><img src="./完整教程--idea使用git进行项目管理 - it技术专业户 - 博客园_files/20160802175714.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/java-maowei/">it技术专业户</a><br>
+            <a href="http://home.cnblogs.com/u/java-maowei/followees">关注 - 0</a><br>
+            <a href="http://home.cnblogs.com/u/java-maowei/followers">粉丝 - 8</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;b78ac903-9758-e611-9fc1-ac853d9f53cc&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(5950930,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">11</span>
+    </div>
+    <div class="buryit" onclick="votePost(5950930,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">1</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="https://www.cnblogs.com/java-maowei/p/8037686.html" class="p_n_p_prefix">» </a> 下一篇：<a href="https://www.cnblogs.com/java-maowei/p/8037686.html" title="发布于2017-12-14 14:49">深入理解Mysql数据库主从延迟</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2016-10-11 21:52</span> <a href="https://www.cnblogs.com/java-maowei/">it技术专业户</a> 阅读(<span id="post_view_count">71875</span>) 评论(<span id="post_comment_count">3</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=5950930" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/java-maowei/p/5950930.html#" onclick="AddToWz(5950930);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=310432,cb_entryId=5950930,cb_blogApp=currentBlogApp,cb_blogUserGuid='b78ac903-9758-e611-9fc1-ac853d9f53cc',cb_entryCreatedDate='2016/10/11 21:52:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"><div id="comments_pager_top"></div>
+<br>
+<div class="feedback_area_title">评论列表</div>
+<div class="feedbackNoItems"></div>	
+
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/java-maowei/p/5950930.html#3628757" class="layer">#1楼</a><a name="3628757" id="comment_anchor_3628757"></a>  <span class="comment_date">2017-02-28 22:26</span> <a id="a_comment_author_3628757" href="http://home.cnblogs.com/u/1095539/" target="_blank">1160068538</a> <a href="http://msg.cnblogs.com/send/1160068538" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3628757" class="blog_comment_body">确实很详细！！收藏了！！！</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3628757,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3628757,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/java-maowei/p/5950930.html#3845518" class="layer">#2楼</a><a name="3845518" id="comment_anchor_3845518"></a>  <span class="comment_date">2017-11-20 15:38</span> <a id="a_comment_author_3845518" href="https://www.cnblogs.com/ljdblog/" target="_blank">博学善思。。ljd</a> <a href="http://msg.cnblogs.com/send/%E5%8D%9A%E5%AD%A6%E5%96%84%E6%80%9D%E3%80%82%E3%80%82ljd" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3845518" class="blog_comment_body">博主，最后一条命令过时了：<br>git branch --set-upstream-to origin/master master <br>顺着博主的文章一路顺利的做到这里，突然说命令过时了，感觉就差这一个命令就完美了</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3845518,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3845518,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3845518_avatar" style="display:none;">http://pic.cnblogs.com/face/1001215/20160730152953.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/java-maowei/p/5950930.html#3977215" class="layer">#3楼</a><a name="3977215" id="comment_anchor_3977215"></a><span id="comment-maxId" style="display:none;">3977215</span><span id="comment-maxDate" style="display:none;">2018/5/18 14:21:51</span>  <span class="comment_date">2018-05-18 14:21</span> <a id="a_comment_author_3977215" href="https://www.cnblogs.com/Sunyelw/" target="_blank">Yellowsun_A</a> <a href="http://msg.cnblogs.com/send/Yellowsun_A" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3977215" class="blog_comment_body"><a href="https://www.cnblogs.com/java-maowei/p/5950930.html#3845518" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3845518);">@</a>
+博学善思。。ljd<br>你俩的命令不是同一个</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3977215,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3977215,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3977215_avatar" style="display:none;">http://pic.cnblogs.com/face/1226859/20170826103204.png</span>
+			</div>
+		</div>
+	<div id="comments_pager_bottom"></div></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/java-maowei/p/5950930.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/java-maowei/p/5950930.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="https://news.cnblogs.com/n/604203/" target="_blank">vivo、OPPO、华为被传“造电视” 或采取代工模式</a><br> ·  <a href="https://news.cnblogs.com/n/604202/" target="_blank">厂区遭堵门技术路线引争议 银隆称不改路线仅是短期调整</a><br> ·  <a href="https://news.cnblogs.com/n/604201/" target="_blank">特斯拉董事会本周与银行见面 私有化价格或超每股420美元</a><br> ·  <a href="https://news.cnblogs.com/n/604200/" target="_blank">调查称对于新款手机美国消费者最感兴趣的还是苹果或三星</a><br> ·  <a href="https://news.cnblogs.com/n/604197/" target="_blank">特斯拉挖来沃尔沃设计大师 负责领导新车外观设计</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="cnblogs_c2" class="c_ad_block"></div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="https://kb.cnblogs.com/page/603279/" target="_blank">成为一个有目标的学习者</a><br> ·  <a href="https://kb.cnblogs.com/page/602903/" target="_blank">历史转折中的“杭派工程师”</a><br> ·  <a href="https://kb.cnblogs.com/page/602573/" target="_blank">如何提高代码质量？</a><br> ·  <a href="https://kb.cnblogs.com/page/602486/" target="_blank">在腾讯的八年，我的职业思考</a><br> ·  <a href="https://kb.cnblogs.com/page/602163/" target="_blank">为什么我离开了管理岗位</a><br></div>» <a href="https://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/java-maowei/">it技术专业户</a><br>园龄：<a href="https://home.cnblogs.com/u/java-maowei/" title="入园时间：2016-08-02">2年</a><br>粉丝：<a href="https://home.cnblogs.com/u/java-maowei/followers/">8</a><br>关注：<a href="https://home.cnblogs.com/u/java-maowei/followees/">0</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;b78ac903-9758-e611-9fc1-ac853d9f53cc&#39;)">+加关注</a></div><script>getFollowStatus('b78ac903-9758-e611-9fc1-ac853d9f53cc')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/07/01&#39;);return false;">&lt;</a></td><td align="center">2018年8月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/09/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td><td class="CalOtherMonthDay" align="center">31</td><td align="center">1</td><td align="center">2</td><td align="center">3</td><td class="CalWeekendDay" align="center">4</td></tr><tr><td class="CalWeekendDay" align="center">5</td><td align="center">6</td><td align="center">7</td><td align="center">8</td><td align="center">9</td><td align="center">10</td><td class="CalWeekendDay" align="center">11</td></tr><tr><td class="CalWeekendDay" align="center">12</td><td class="CalTodayDay" align="center">13</td><td align="center">14</td><td align="center">15</td><td align="center">16</td><td align="center">17</td><td class="CalWeekendDay" align="center">18</td></tr><tr><td class="CalWeekendDay" align="center">19</td><td align="center">20</td><td align="center">21</td><td align="center">22</td><td align="center">23</td><td align="center">24</td><td class="CalWeekendDay" align="center">25</td></tr><tr><td class="CalWeekendDay" align="center">26</td><td align="center">27</td><td align="center">28</td><td align="center">29</td><td align="center">30</td><td align="center">31</td><td class="CalOtherMonthDay" align="center">1</td></tr><tr><td class="CalOtherMonthDay" align="center">2</td><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td><td class="CalOtherMonthDay" align="center">6</td><td class="CalOtherMonthDay" align="center">7</td><td class="CalOtherMonthDay" align="center">8</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<div class="catListLink">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="https://www.cnblogs.com/java-maowei/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="https://www.cnblogs.com/java-maowei/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="https://www.cnblogs.com/java-maowei/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="https://www.cnblogs.com/java-maowei/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="https://www.cnblogs.com/java-maowei/tag/" title="我的博客的标签列表">我的标签</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+<ul>
+
+</ul>
+</div>
+</div></div><div id="sidebar_toptags" class="sidebar-block"></div><div id="sidebar_categories">
+<div id="sidebar_postarchive" class="catListPostArchive sidebar-block">
+<h3 class="catListTitle">随笔档案</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="https://www.cnblogs.com/java-maowei/archive/2017/12.html">2017年12月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="https://www.cnblogs.com/java-maowei/archive/2016/10.html">2016年10月 (1)</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/java-maowei/p/5950930.html#3977215">1. Re:完整教程--idea使用git进行项目管理</a></li>
+        <li class="recent_comment_body">@博学善思。。ljd你俩的命令不是同一个...</li>
+        <li class="recent_comment_author">--Sunyelw</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/java-maowei/p/5950930.html#3845518">2. Re:完整教程--idea使用git进行项目管理</a></li>
+        <li class="recent_comment_body">博主，最后一条命令过时了：git branch --set-upstream-to origin/master master 顺着博主的文章一路顺利的做到这里，突然说命令过时了，感觉就差这一个命令就完......</li>
+        <li class="recent_comment_author">--博学善思。。ljd</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/java-maowei/p/5950930.html#3628757">3. Re:完整教程--idea使用git进行项目管理</a></li>
+        <li class="recent_comment_body">确实很详细！！收藏了！！！</li>
+        <li class="recent_comment_author">--1160068538</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="https://www.cnblogs.com/java-maowei/p/5950930.html">1. 完整教程--idea使用git进行项目管理(71875)</a></li><li><a href="https://www.cnblogs.com/java-maowei/p/8037686.html">2. 深入理解Mysql数据库主从延迟(255)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="https://www.cnblogs.com/java-maowei/p/5950930.html">1. 完整教程--idea使用git进行项目管理(3)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div id="TopDiggPostsBlock"><ul><li><a href="https://www.cnblogs.com/java-maowei/p/5950930.html">1. 完整教程--idea使用git进行项目管理(11)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2018 it技术专业户
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+</body></html>
